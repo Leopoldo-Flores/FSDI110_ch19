@@ -133,3 +133,11 @@ def test():
 # if __name__ == '__main__':
 #     app.run(debug=True)
 
+#adding some code that fixes things
+
+# command line:
+"""
+git add .
+git commit -m "<a message>"
+git push
+""""
