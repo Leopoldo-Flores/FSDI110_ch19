@@ -2,6 +2,7 @@ from flask import Flask, abort, request, render_template
 from data import data
 import json
 from flask_cors import CORS
+from config import db, parse_json
 
 app = Flask(__name__)
 CORS(app)
@@ -42,8 +43,8 @@ def fullname():
 
 @app.route("/api/catalog")
 def get_catalog():
-    return json.dumps(products)
-
+    catalog = db.products.find({})
+    return parse_json(catalog)
 # create a POST endpoint
 # to register new products
 
@@ -51,8 +52,8 @@ def get_catalog():
 @app.route("/api/catalog", methods=['POST'])
 def save_product():
     prod = request.get_json()
-    products.append(prod)
-    return json.dumps(prod)
+    db.products.insert(prod)
+    return parse_jspn(prod)
 
 
 @app.route("/api/catalog/<category>")
@@ -104,30 +105,14 @@ def get_categories():
 
 
 @app.route("/api/test")
-def test():
-    # add
-    products.append("strawberry")
-    products.append("dragon fruit")
+def test_data_manipulation():
+    test = db.test.find({})
+    print(test)
 
-    # length
-    # print("You have: " + str(len(products))
-    print(f"You have: {len(products)} products in your catalog")
-
-    # iterate
-    for fruit in products:
-        print(fruit)
-
-    # print the name 10 times
-    for i in range(0, 10, 1):
-        print(me["name"])
-
-    # remove apple from the list
-    products.remove("apple")
-
-    # print the list
-    for f in products:
-        print(products)
-    return "Check your terminal"
+    for entry in test:
+        print(entry)
+    
+    return parse_json(test_data[0])
 
 
 # if __name__ == '__main__':
@@ -136,8 +121,4 @@ def test():
 #adding some code that fixes things
 
 # command line:
-"""
-git add .
-git commit -m "<a message>"
-git push
-""""
+
